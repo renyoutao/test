@@ -1,0 +1,63 @@
+C# 语法:
+ 引用类型作为值参数和引用参数的区别
+ 
+ 作为值参数(不加ref 关键字): 如果在方法内部创建一个新对象并赋值给形参,将切断形参与实参的关联,方法调用结束后,新对象
+ 将不存在
+   例子:
+     class Program
+    {
+        static void Main(string[] args)
+        {
+            MyClass c1 = new MyClass();
+            Console.WriteLine("方法调用之前:{0}",c1.Val);
+            RefAsParameter( c1);
+            Console.WriteLine("方法调用之后的值是:{0}",c1.Val);
+            Console.ReadKey();
+        }
+        static void RefAsParameter(  MyClass c1)
+        {
+            c1.Val = 30;
+            Console.WriteLine("方法处理后的值:{0}",c1.Val);
+            c1 = new MyClass();
+            Console.WriteLine("重新实例化的值:{0}", c1.Val);
+        }
+            
+    }
+    public class MyClass
+    {
+        public int Val = 20;
+    }
+	输出: 方法调用之前:20
+          方法处理后的值:30
+          重新实例化的值:20
+          方法调用之后的值是:30--(实参不存在 新的值)
+		  
+ 作为引用类型传递:如果在方法内部创建一个新对象并赋值给形参,方法结束后该对象依然存在,并且是实参所引用的值
+ 例子：
+ class Program
+    {
+        static void Main(string[] args)
+        {
+            MyClass c1 = new MyClass();
+            Console.WriteLine("方法调用之前:{0}",c1.Val);
+            RefAsParameter(ref c1);
+            Console.WriteLine("方法调用之后的值是:{0}",c1.Val);
+            Console.ReadKey();
+        } 
+        static void RefAsParameter(ref  MyClass c1)
+        {
+            c1.Val = 30;
+            Console.WriteLine("方法处理后的值:{0}",c1.Val);
+            c1 = new MyClass();
+            Console.WriteLine("重新实例化的值:{0}", c1.Val);
+        }
+            
+    }
+    public class MyClass
+    {
+        public int Val = 20;
+    }
+	输出: 方法调用之前:20
+          方法处理后的值:30
+          重新实例化的值:20
+          方法调用之后的值是:20 --实参引用的值
